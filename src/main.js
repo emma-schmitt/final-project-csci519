@@ -4,7 +4,7 @@
 
 import "./style.css";
 import { listenToMicrophone, listenToVideo } from "./listen.js";
-import { midiNumberFromFrequency, describeMidiNumber } from "./pitch.js";
+import { midiNumberFromFrequency, describeMidiNumber, tuningCategory } from "./pitch.js";
 
 // readings under either of these count as "no clear note" (tune these for your mic)
 const MINIMUM_CLARITY = 0.9; // 0 to 1, how clearly the sound has one pitch
@@ -17,7 +17,7 @@ const performanceVideo = document.querySelector("#performance-video");
 const noteNameDisplay = document.querySelector("#detected-note-name");
 const centsDisplay = document.querySelector("#cents-from-nearest-note");
 const soundDetailsDisplay = document.querySelector("#sound-details");
-
+const pitchDetails = document.querySelector("#pitch-details"); // the box around the note name and it has the cents/details
 // live playing: start the mic when the button is clicked
 startMicrophoneButton.addEventListener("click", async () => {
   startMicrophoneButton.disabled = true;

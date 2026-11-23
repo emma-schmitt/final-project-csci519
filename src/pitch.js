@@ -23,3 +23,12 @@ export function describeMidiNumber(midiNumber) {
     const centsFromNearestNote = Math.round(100 * (midiNumber - nearestNoteNumber));
     return {noteLabel: `${noteName}${octaveNumber}`, nearestNoteNumber, centsFromNearestNote};
 }
+
+// within 15 cents either way counts as it being in tune beyond that +15 is sharp and -15 is flat.
+export const IN_TUNE_CENTS = 15;
+
+// determinign if it is in tune, sharp or flat
+export function tuningCategory(cents) {
+    if(Math.abs(cents) <= IN_TUNE_CENTS) return "in tune";
+    return cents > 0 ? "sharp" : "flat";
+}
