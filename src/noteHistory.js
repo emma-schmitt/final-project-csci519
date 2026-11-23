@@ -52,17 +52,40 @@ export class NoteHistory {
 
         // a note just ended: add its box just before the in-progress box, and scroll so the newest boxes stay in view
     addNote(note) {
-        
+        const box = document.createElement("button");
+        box.className = `note-box ${tuningCategory(note.cents)}`;
+        box.innerHTML = boxContents(note);
+        box.addEventListener("click", () => this.showNoteDetail(note, box));
+        this.boxArea.insertBefore(chip, this.inProgressBox);
+        this.boxArea.scrollTop = this.boxArea.scrollHeight;
     }
 
     // the note being played right now (or null): redraws the dashed box at the end, about 60 times a second
     showNoteInProgress(note) {
-        
+        this.inProgressBox.hidden = !note;
+        if (!note) return;
+        this.inProgressBox.className = `note-box in-progress ${tuningCategory(note.cents)}`;
+        this.inProgressBox.innerHTML = boxContents(note);
     }
 
     // clicking a box: highlight it and show its details underneath
-    showNoteDetail(note, chip) {
-        
+    showNoteDetail(note, box) {
+        if (this.selectedBox) this.selectedBox.classList.remove("selected");
+        box.classList.add("selected");
+        this.selectedBox = box;
+        const expectedHz = frequencyFromMidi(note.nearestNoteNumber);
+        const playedHz = expectedHz * Math.pow(2, note.cents / 1200); // 1200 cents is an octave octave doubles the frequency
+        const category = tuningCategory(note.cents);
+        const tuningWord = category === "in-tune" ? "in tune" : category;
+        const centsAway = Math.abs(note.cents);
+        this.detailArea.innerHTML = `
+            <p class="detail-title">${note.noteLabel} at ${formatTime(note.startTime)} · ${centsAway} ${centsAway === 1 ? "cent" : "cents"} ${tuningWord}</p>
+            <p class="detail-numbers">Expected ${expectedHz.toFixed(1)} Hz, played ${playedHz.toFixed(1)} Hz, held ${(note.endTime - note.startTime).toFixed(1)} s</p>`;
+        if (this.playNoteAgain) { // only recordings can go back in time, the live mic can't which idk if this is gonna work but we'll see
+            const replayButton = document.createElement("button");
+            replayButton.textContent = `Play this moment again (${formatTime(note.startTime)})`;
+            replayButton.addEventListener("click", () => this.playNoteAgain(note));
+            this.detailArea.append(replayButton);
         }
     }
 }
