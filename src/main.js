@@ -60,10 +60,12 @@ function showReading({ frequencyHz, clarity, volume }) {
   if (clarity < MINIMUM_CLARITY || volume < MINIMUM_VOLUME) { // silence or noise: don't guess a note
     noteNameDisplay.textContent = "–";
     centsDisplay.textContent = "";
+    pitchReadout.className = ""; // no note = no color!
     return;
   }
   const { noteLabel, centsFromNearestNote } = describeMidiNumber(midiNumberFromFrequency(frequencyHz));
   noteNameDisplay.textContent = noteLabel;
   const sign = centsFromNearestNote > 0 ? "+" : ""; // a + in front of sharp notes so +18 and -18 are easy to tell apart
   centsDisplay.textContent = `${sign}${centsFromNearestNote} cents`;
+  pitchReadout.className = tuningCategory(centsFromNearestNote); // color the note name based on if it is in tune, sharp or flat
 }
