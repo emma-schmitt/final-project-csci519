@@ -32,3 +32,8 @@ export function tuningCategory(cents) {
     if(Math.abs(cents) <= IN_TUNE_CENTS) return "in tune";
     return cents > 0 ? "sharp" : "flat";
 }
+
+// midi nyumber back into hertz so going 60 midi or middle c to 216.6 HZ
+export function frequencyFromMidi(midiNumber) {
+    return 440 * Math.pow(2, (midiNumber - 69)/12);
+}

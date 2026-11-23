@@ -2,12 +2,13 @@
 body { font-family: system-ui, sans-serif; margin: 0; display: grid; place-items: center; min-height: 100vh; }
 main { text-align: center; padding: 1rem; } /* padding so nothing touches the edge on a small window */
 button { font-size: 1rem; padding: 0.6rem 1.2rem; }
-#detected-note-name { font-size: 5rem; margin-top: 1.5rem; font-weight: bold; } /* wanting to bold the note name to make it a bit clearer and easier to read
+#detected-note-name { font-size: 5rem; margin-top: 1.5rem; font-weight: bold; } /* wanting to bold the note name to make it a bit clearer and easier to read */
 #cents-from-nearest-note { font-size: 1.5rem; min-height: 2rem; }
 #sound-details { color: #666; margin-top: 1rem; font-variant-numeric: tabular-nums; } /* tabular-nums: every digit the same width so the numbers don't jump around */
 #performance-video { width: 100%; max-width: 480px; margin-top: 1rem; } /* the video player, never wider than 480px */
 #sound-source-controls { display: flex; gap: 1rem; align-items: center; justify-content: center; flex-wrap: wrap; } /* mic button and file picker side by side */
-/* tunign colors so the JS says hey this is in tune sharp or flat this says teh colors associated with those labels */
+/* tuning colors so the JS says hey this is in tune sharp or flat this says the colors associated with those labels */
 .in-tune {--tuning-color: #276221 /* green */;}
 .flat {--tuning-color: #CD7F32 /*amber*/;}
 .sharp {--tuning-color: #18848e /*cyan*/;}
+#detected-note-name, #cents-from-nearest-note { color: var(--tuning-color, black); } /* use the tuning color, or black when there is no note */
