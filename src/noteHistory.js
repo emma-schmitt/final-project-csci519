@@ -15,7 +15,9 @@ export function signedCents(cents) {
 
 // seconds is m:ss so like 75 -> 1:15
 export function formatTime(totalSeconds) {
-
+    const mins = Math.floor(totalSeconds / 60);
+    const secs = Math.floor(totalSeconds % 60);
+    return `${mins}:${Strings(secs).padStart(2, "0")}`;
 }
 
 // what goes inside of one of the boxes so it incldues the note name the tiny scale with the dot and the cents
