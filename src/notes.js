@@ -6,8 +6,11 @@ const SILENCE_SECONDS = 0.15 // this long without a clear reading ends the note
 const SKIP_SECONDS = 0.05 // ignore the first 50 ms of a note goal is to make sure that you ignore the first part where the bow is stil trying to catch the string
 
 // finding the median
-function median(number) {
-
+function median(numbers) {
+    const sorted = [...numbers].sort((first, second) => first-second);
+    const middleIndex = Math.floor(sorted.length / 2);
+    if (sorted.length % 2 === 1) return sorted[middleIndex];
+    return (sorted[middleIndex - 1] + sorted[middleIndex]) / 2;
 }
 
 export class NoteTracker {
