@@ -20,32 +20,31 @@ constructor(noteFinished) {
     this.finishedNotes = []; //basically the list of finished tracked notes\
     this.currentNote = null; // every note being played rn
     }
-}
 
 // so basically a clear reading comes in either keep adding it to the current note or start a new note
-addReading({ }) {
+addReading({timeSeconds, noteLabel, nearestNote, centsReading }) {
     if (this.currentNote) {
         const isDifferentNote = nearestNote !== this.currentNote.nearestNote;
          const silenceTooLong = timeSeconds - this.currentNote.endTime > SILENCE_SECONDS;
          const wentBackwards = timeSeconds < this.currentNote.endTiem; // skipped back in the video
          if (isDifferentNote || silenceTooLong || wentBackwards) this.finishCurrentNote();
-    }
+        }
     if(!this.currentNote) {
         this.currentNote = { noteLabel, nearestNote, startTime: timeSeconds, endTime: timeSeconds, centsReading: []};
-    }
+        }
     this.currentNote.endTime = timeSeconds;
     // only keep teh cents once past the start note
     if(timeSeconds - this.currentNote.startTime >= SKIP_SECONDS) {
         this.currentNote.centsReading.push(centsReading);
+        }
     }
-}
 
 // no clear note right now so if the silence lasts long enough then  teh current note ends
 addSilence(timeSeconds) {
     if (this.currentNote && timeSeconds - this.currentNote.endTime > SILENCE_SECONDS){
         this.finishCurrentNote();
-    }
-} 
+        }
+    } 
 
 // close the current note and save it UNLESS it wasnt a full note
 finishCurrentNote() {
@@ -54,13 +53,14 @@ finishCurrentNote() {
     if (!note) return;
     const lengthSeconds = note.endTime - note.startTime;
     if (lengthSeconds < SHORTEST_NOTE_SECONDS || note.centsReading.length == 0) return; // making sure we tell the difference between a note and a blip
-    note.cents = Math.round(median(note.centsReadings));
+    note.cents = Math.round(median(note.centsReading));
     this.finishedNotes.push(note);
     this.noteFinished(note);
-}
+    }
 
 // how the note being played right now is doing so far
 currentNoteStatus() {
     if (!this.currentNote || this.currentNote.centsReading.length == 0) return null;
     return {...this.currentNote, cents: Math.round(median(this.currentNote.centsReading))};
+    }
 }
