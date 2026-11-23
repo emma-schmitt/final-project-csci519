@@ -40,14 +40,27 @@ addReading({ }) {
     }
 }
 
-addSilence() {
+// no clear note right now so if the silence lasts long enough then  teh current note ends
+addSilence(timeSeconds) {
+    if (this.currentNote && timeSeconds - this.currentNote.endTime > SILENCE_SECONDS){
+        this.finishCurrentNote();
+    }
+} 
 
-}
-
+// close the current note and save it UNLESS it wasnt a full note
 finishCurrentNote() {
-
+    const note = this.currentNote;
+    this.currentNote = null;
+    if (!note) return;
+    const lengthSeconds = note.endTime - note.startTime;
+    if (lengthSeconds < SHORTEST_NOTE_SECONDS || note.centsReading.length == 0) return; // making sure we tell the difference between a note and a blip
+    note.cents = Math.round(median(note.centsReadings));
+    this.finishedNotes.push(note);
+    this.noteFinished(note);
 }
 
+// how the note being played right now is doing so far
 currentNoteStatus() {
-
+    if (!this.currentNote || this.currentNote.centsReading.length == 0) return null;
+    return {...this.currentNote, cents: Math.round(median(this.currentNote.centsReading))};
 }
