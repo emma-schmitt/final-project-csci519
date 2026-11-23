@@ -22,8 +22,22 @@ constructor(noteFinished) {
     }
 }
 
+// so basically a clear reading comes in either keep adding it to the current note or start a new note
 addReading({ }) {
-
+    if (this.currentNote) {
+        const isDifferentNote = nearestNote !== this.currentNote.nearestNote;
+         const silenceTooLong = timeSeconds - this.currentNote.endTime > SILENCE_SECONDS;
+         const wentBackwards = timeSeconds < this.currentNote.endTiem; // skipped back in the video
+         if (isDifferentNote || silenceTooLong || wentBackwards) this.finishCurrentNote();
+    }
+    if(!this.currentNote) {
+        this.currentNote = { noteLabel, nearestNote, startTime: timeSeconds, endTime: timeSeconds, centsReading: []};
+    }
+    this.currentNote.endTime = timeSeconds;
+    // only keep teh cents once past the start note
+    if(timeSeconds - this.currentNote.startTime >= SKIP_SECONDS) {
+        this.currentNote.centsReading.push(centsReading);
+    }
 }
 
 addSilence() {
