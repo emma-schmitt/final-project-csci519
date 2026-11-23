@@ -1,0 +1,32 @@
+<!-- index.html is teh page layout for this web app. its a standard html page, lays out everything
+ seen on the page itself and contains no logic. main contents are two ways to give input: live audio
+ from microphone or a pre recorded file. it also contains a video player that appears when a video is selected
+ and finally it has the pitch readout so it shows the note being played and how far off the user
+ is from the actual needed intonation/note.
+-->
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Practice Tool</title>
+    </head>
+    <body>
+        <main>
+            <h1>Practice Tool</h1>
+            <!-- chooses where the audio/sound comes from either live mic or video recording-->
+            <div id="sound-source-controls">
+              <button id="start-microphone-button">Play into your Microphone</button>
+              <label>or upload a recording <input id="recording-file-input" type="file" accept="video/*,audio/*" /></label>
+            </div>
+            <!-- video player is hidden tull a recording is chosen and pressing play starts the analysis of the pratice-->
+             <video id="performance-video" controls hidden></video>
+            <div id="pitch-readout">
+                <div id="detected-note-name">-</div>
+                <div id="cents-from-nearest-note">-</div>
+                <div id="sound-details">-</div>
+            </div>
+        </main>
+        <script type="module" src="/src/main.js"></script>
+    </body>
+</html>
